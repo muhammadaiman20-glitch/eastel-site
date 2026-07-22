@@ -19,6 +19,7 @@
             --radius: 16px;
             --transition: 0.3s ease;
             --shadow: 0 8px 32px rgba(0,0,0,0.5);
+            --footer-bg: rgba(0, 0, 0, 0.3);
         }
         * { 
             margin:0; 
@@ -259,6 +260,58 @@
             color:var(--muted);
             line-height:1.6;
         }
+        .faq-section {
+            padding:5rem 2rem;
+            background:rgba(0,0,0,0.1);
+        }
+        .faq-item {
+            background:var(--card);
+            backdrop-filter:blur(10px);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            margin-bottom:1rem;
+            overflow:hidden;
+        }
+        .faq-question {
+            padding:1.5rem 2rem;
+            background:var(--glass);
+            cursor:pointer;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            transition:var(--transition);
+        }
+        .faq-question:hover {
+            background:rgba(255,255,255,0.12);
+        }
+        .faq-question h3 {
+            margin:0;
+            color:var(--accent);
+            font-size:1.1rem;
+            font-weight:600;
+        }
+        .faq-answer {
+            max-height:0;
+            overflow:hidden;
+            transition:max-height 0.3s ease;
+            background:var(--card);
+            backdrop-filter:blur(10px);
+            border-top:1px solid var(--border);
+        }
+        .faq-answer p {
+            padding:1.5rem 2rem;
+            color:var(--muted);
+            line-height:1.6;
+        }
+        .faq-item.active .faq-answer {
+            max-height:200px;
+        }
+        .faq-icon {
+            transition:transform 0.3s ease;
+        }
+        .faq-item.active .faq-icon {
+            transform:rotate(180deg);
+        }
         .form-section {
             background:var(--card);
             backdrop-filter:blur(10px);
@@ -329,32 +382,103 @@
             font-size:0.95rem;
         }
         footer {
-            text-align:center;
-            padding:2rem;
-            font-size:0.9rem;
-            color:var(--muted);
+            background:var(--footer-bg);
+            backdrop-filter:blur(10px);
             border-top:1px solid var(--border);
-            margin-top:3rem;
+            padding:3rem 2rem 2rem;
+            margin-top:4rem;
         }
-        
-        /* Improved form layout */
+        .footer-content {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:2rem;
+            margin-bottom:2rem;
+        }
+        .footer-column h3 {
+            margin-bottom:1.5rem;
+            color:var(--accent);
+            font-size:1.2rem;
+            font-weight:600;
+            position:relative;
+        }
+        .footer-column h3::after {
+            content:'';
+            display:block;
+            width:40px;
+            height:2px;
+            margin-top:0.5rem;
+            background:linear-gradient(90deg,var(--accent),var(--accent2));
+            border-radius:1px;
+        }
+        .footer-column ul {
+            list-style:none;
+        }
+        .footer-column li {
+            margin-bottom:0.75rem;
+        }
+        .footer-column a {
+            color:var(--muted);
+            font-size:0.9rem;
+            display:block;
+            padding:0.25rem 0;
+            transition:var(--transition);
+        }
+        .footer-column a:hover {
+            color:var(--text);
+            padding-left:0.5rem;
+        }
+        .social-links {
+            display:flex;
+            gap:1rem;
+            margin-top:1rem;
+        }
+        .social-links a {
+            width:40px;
+            height:40px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:var(--glass);
+            border-radius:50%;
+            transition:var(--transition);
+        }
+        .social-links a:hover {
+            background:var(--accent);
+            color:#000;
+            transform:translateY(-3px);
+        }
+        .app-store {
+            display:flex;
+            gap:1rem;
+            margin-top:1.5rem;
+        }
+        .app-store img {
+            height:40px;
+            transition:var(--transition);
+        }
+        .app-store img:hover {
+            transform:scale(1.05);
+        }
+        .footer-bottom {
+            text-align:center;
+            padding-top:1.5rem;
+            border-top:1px solid var(--border);
+            color:var(--muted);
+            font-size:0.85rem;
+        }
         .form-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
-        
         .form-group-full {
             grid-column: 1 / -1;
         }
-        
-        /* Location picker styling */
         .location-picker {
             position: relative;
             margin-top: 0.5rem;
         }
-        
         .location-icon {
             position: absolute;
             left: 1rem;
@@ -363,18 +487,14 @@
             color: var(--muted);
             font-size: 1.1rem;
         }
-        
         .location-input {
             padding-left: 2.5rem !important;
         }
-        
-        /* IC Input styling */
         .ic-input {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        
         .ic-prefix {
             background: rgba(0,0,0,0.2);
             padding: 0.5rem 0.8rem;
@@ -383,8 +503,6 @@
             font-weight: 500;
             color: var(--muted);
         }
-        
-        /* Responsive adjustments */
         @media(max-width:768px){
             .hero h1{font-size:2.2rem;}
             .hero p{font-size:1rem;}
@@ -394,9 +512,10 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
         }
-        
-        /* Animation for form elements */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -407,12 +526,10 @@
                 transform: translateY(0);
             }
         }
-        
-        .form-group {
+        .form-group, .faq-item, .card {
             animation: fadeInUp 0.5s ease forwards;
             opacity: 0;
         }
-        
         .form-group:nth-child(1) { animation-delay: 0.1s; }
         .form-group:nth-child(2) { animation-delay: 0.2s; }
         .form-group:nth-child(3) { animation-delay: 0.3s; }
@@ -421,6 +538,13 @@
         .form-group:nth-child(6) { animation-delay: 0.6s; }
         .form-group:nth-child(7) { animation-delay: 0.7s; }
         .form-group:nth-child(8) { animation-delay: 0.8s; }
+        .faq-item:nth-child(1) { animation-delay: 0.9s; }
+        .faq-item:nth-child(2) { animation-delay: 1.0s; }
+        .faq-item:nth-child(3) { animation-delay: 1.1s; }
+        .card:nth-child(1) { animation-delay: 1.2s; }
+        .card:nth-child(2) { animation-delay: 1.3s; }
+        .card:nth-child(3) { animation-delay: 1.4s; }
+        .card:nth-child(4) { animation-delay: 1.5s; }
     </style>
 </head>
 <body>
@@ -472,6 +596,43 @@
                 <div class="card-icon">💬</div>
                 <h3>VoIP &amp; Communication</h3>
                 <p>Crystal‑clear voice over IP solutions with flexible plans for enterprises.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3>What internet speeds do you offer?</h3>
+                <span class="faq-icon">▼</span></h3>
+            </div>
+            <div class="faq-answer">
+                <p>For basic browsing and email, 25-50 Mbps is sufficient. For 4K streaming and online gaming, we recommend 100-200 Mbps. For large households with multiple devices, 500 Mbps to 1 Gbps ensures smooth performance for everyone.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3>How long does installation take? <span class="faq-icon">▼</span></h3>
+            </div>
+            <div class="faq-answer">
+                <p>Standard installations typically take 2-4 hours. Complex setups or custom configurations may require additional time. Our technicians will provide an accurate estimate during the site survey.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3>What is your contract policy? <span class="faq-icon">▼</span></h3>
+            </div>
+            <div class="faq-answer">
+                <p>We offer both contract and no-contract options. Contract plans (12-24 months) often include promotional pricing and free equipment. No-contract plans provide flexibility with month-to-month billing but may have higher monthly rates.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3>Do you offer technical support? <span class="faq-icon">▼</span></h3>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! We provide 24/7 technical support via phone, email, and live chat. Our support team is based in Malaysia and understands local infrastructure challenges to provide faster resolutions.</p>
             </div>
         </div>
     </section>
@@ -555,7 +716,58 @@
     </div>
 
     <footer>
-        © 2026 Eastel. All Rights Reserved.
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>About Eastel</h3>
+                <ul>
+                    <li><a href="#home">Our Story</a></li>
+                    <li><a href="#about">EASTELpreneurs</a></li>
+                    <li><a href="#services">Business Solutions</a></li>
+                    <li><a href="#contact">Lifestyle Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Technical Support</a></li>
+                    <li><a href="#">Billing & Payments</a></li>
+                    <li><a href="#">Service Outages</a></li>
+                    <li><a href="#">Upgrade/Downgrade</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Terms and Conditions</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Delivery Policy</a></li>
+                    <li><a href="#">Code of Conduct</a></li>
+                    <li><a href="#">Exchange and Return Policy</a></li>
+                    <li><a href="#">Eastel Wallet Upgrade</a></li>
+                    <li><a href="#">Eastel Starter Kit</a></li>
+                    <li><a href="#">Dealer Postings</a></li>
+                    <li><a href="#">www.complaint.cfm.org.my</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+                <div class="app-store">
+                    <img src="https://via.placeholder.com/120x40/00ffff/000000?text=App+Store" alt="App Store">
+                    <img src="https://via.placeholder.com/120x40/00ffff/000000?text=Google+Play" alt="Google Play">
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Eastel. All Rights Reserved. | <a href="#" style="color:var(--accent);">Terms of Service</a> | <a href="#" style="color:var(--accent);">Privacy Policy</a>
+        </div>
     </footer>
 
     <script>
@@ -606,17 +818,24 @@
             records.push(data);
             localStorage.setItem('eastelLeads', JSON.stringify(records));
 
-            showResponse('Thank you! Your interest has been recorded.', 'success');
-            this.reset();
+            showResponse('Thank you! Your interest has been recorded.', 'successfully(); // Reset form
         });
 
         function showResponse(msg, type){
             const resp = document.getElementById('formResponse');
             resp.textContent = msg;
-            resp.style.color = type === 'success' ? var(--success) : var(--error);
+            resp.style.color = type === 'success' ? 'var(--success)' : 'var(--error)';
             resp.style.fontWeight = '600';
             setTimeout(() => { resp.textContent = ''; }, 5000);
         }
+
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const parent = item.parentElement;
+                parent.classList.toggle('active');
+            });
+        });
 
         // Location pinpoint simulation (in real app, this would integrate with Google Maps API)
         document.getElementById('location').addEventListener('click', function() {
