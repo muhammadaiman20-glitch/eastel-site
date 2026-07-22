@@ -310,9 +310,13 @@
             transition: var(--transition);
         }
         .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,255,255,0.3);
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow); }
         .btn-secondary {
             background: white;
@@ -662,7 +666,246 @@
             .header-right a:not(.lang-switch a) { display: none; }
             .footer-grid { grid-template-columns: 1fr; }
         }
-    </style>
+    
+
+.btn-circle {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    font-size: 1.2rem;
+}
+        
+        /* Enhanced Form Styles */
+        .form-section {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 500px;
+            margin: 2rem auto;
+            box-shadow: 0 0 20px rgba(0,255,255,0.2);
+            position: relative;
+            z-index: 10;
+            border: 1px solid var(--border);
+        }
+        
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        
+        .form-section h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .form-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(0,255,255,0.5);
+            background: rgba(0,0,0,0.3);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,255,255,0.6);
+            background: var(--primary-dark);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn i {
+            font-size: 1.2rem;
+        }
+        
+        #formResponse {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 600;
+            min-height: 1.5rem;
+            font-size: 0.95rem;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Enhance input groups */
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-group-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+        
+        .input-group input {
+            padding-left: 2.5rem !important;
+        }
+        
+        /* Form row layout */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+        
+        /* Location picker styling */
+        .location-picker {
+            position: relative;
+            margin-top: 0.5rem;
+        }
+        
+        .location-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        
+        .location-input {
+            padding-left: 2.5rem !important;
+        }
+        
+        /* IC input styling */
+        .ic-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .ic-prefix {
+            background: rgba(0,0,0,0.2);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px 0 0 8px;
+            border-right: 1px solid var(--border);
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        
+        /* Responsive adjustments */
+        @media(max-width:768px){
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .form-section {
+                margin: 1.5rem auto;
+                padding: 2rem;
+            }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }</style>
 </head>
 <body>
 
@@ -1193,6 +1436,8 @@
         var address = document.getElementById('address').value.trim();
         var location = document.getElementById('location').value.trim();
         var product = document.getElementById('product').value;
+        var serviceType = document.getElementById('serviceType').value;
+        var message = document.getElementById('message').value.trim();
 
         if(!name || !ic || !email || !phone || !address || !location || !product){
             showResponse('Please fill in all required fields.', 'error');
@@ -1204,16 +1449,54 @@
             return;
         }
 
-        var records = JSON.parse(localStorage.getItem('eastelLeads') || '[]');
-        records.push({
-            timestamp: new Date().toISOString(),
-            name: name, ic: ic, email: email, phone: phone,
-            address: address, location: location, product: product
-        });
-        localStorage.setItem('eastelLeads', JSON.stringify(records));
+        // Show loading state
+        var submitBtn = this.querySelector('.submit-btn');
+        var originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'Submitting... <span class="spinner"></span>';
+        submitBtn.disabled = true;
 
-        showResponse('Thank you! Your interest has been recorded.', 'success');
-        document.getElementById('interestForm').reset();
+        // Prepare data for submission
+        var formData = {
+            name: name,
+            ic: ic,
+            email: email,
+            phone: phone,
+            address: address,
+            location: location,
+            product: product,
+            serviceType: serviceType,
+            message: message
+        };
+
+        // YOUR WEB APP URL GOES HERE - REPLACE THIS WITH YOUR ACTUAL DEPLOYED URL
+        var WEBSITE_URL = 'https://script.google.com/macros/s/AKfycbxzG6uV7J8y9z0A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2W3X4Y5Z6/exec';
+
+        // Send data to Google Apps Script endpoint
+        fetch(WEBSITE_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Important for Google Apps Script
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(function(response) {
+            // Reset button state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+            
+            // Show success message
+            showResponse('Thank you! Your interest has been recorded.', 'success');
+            document.getElementById('interestForm').reset();
+        })
+        .catch(function(error) {
+            // Reset button state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+            
+            console.error('Submission error:', error);
+            showResponse('Something went wrong. Please try again.', 'error');
+        });
     });
 
     function showResponse(msg, type){
