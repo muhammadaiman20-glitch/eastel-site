@@ -14,19 +14,34 @@
             --accent2: #ff00ff;
             --text: #e0f7ff;
             --muted: #a0c4d6;
+            --success: #00ff88;
+            --error: #ff5555;
             --radius: 16px;
             --transition: 0.3s ease;
+            --shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * { 
+            margin:0; 
+            padding:0; 
+            box-sizing:border-box; 
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #000428, #00122b);
             color: var(--text);
             min-height:100vh;
             line-height:1.6;
+            overflow-x: hidden;
         }
-        a { color:var(--accent); text-decoration:none; }
-        a:hover { text-decoration:underline; }
+        a { 
+            color:var(--accent); 
+            text-decoration:none; 
+            transition: var(--transition);
+        }
+        a:hover { 
+            text-decoration:underline; 
+            color:var(--accent2);
+        }
         header {
             padding:1.5rem 2rem;
             display:flex;
@@ -39,21 +54,64 @@
             position:sticky;
             top:0;
             z-index:100;
+            box-shadow: var(--shadow);
         }
-        .logo { font-size:1.8rem; font-weight:bold; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        nav ul { display:flex; gap:2rem; list-style:none; }
-        nav li a { font-weight:500; transition:var(--transition); }
-        nav li a:hover { color:var(--accent2); }
-        .lang-switch { display:flex; gap:0.8rem; align-items:center; }
-        .lang-switch a { padding:0.3rem 0.6rem; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; transition:var(--transition); }
-        .lang-switch a.active, .lang-switch a:hover { background:var(--glass); color:#fff; }
+        .logo { 
+            font-size:1.8rem; 
+            font-weight:bold; 
+            background:linear-gradient(90deg,var(--accent),var(--accent2)); 
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+        nav ul { 
+            display:flex; 
+            gap:2rem; 
+            list-style:none; 
+        }
+        nav li a { 
+            font-weight:500; 
+            transition:var(--transition);
+            position:relative;
+        }
+        nav li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transition: width 0.3s ease;
+        }
+        nav li a:hover::after {
+            width: 100%;
+        }
+        .lang-switch { 
+            display:flex; 
+            gap:0.8rem; 
+            align-items:center; 
+        }
+        .lang-switch a { 
+            padding:0.3rem 0.6rem; 
+            border:1px solid var(--border); 
+            border-radius:8px; 
+            font-size:0.9rem; 
+            transition:var(--transition);
+            font-weight: 500;
+        }
+        .lang-switch a.active, 
+        .lang-switch a:hover { 
+            background:var(--glass); 
+            color:#fff;
+            border-color: var(--accent);
+        }
         .hero {
-            min-height:80vh;
+            min-height:85vh;
             display:flex;
             align-items:center;
             justify-content:center;
             text-align:center;
-            padding:2rem;
+            padding:4rem 2rem 2rem;
             position:relative;
             overflow:hidden;
         }
@@ -65,28 +123,37 @@
             pointer-events:none;
             animation:pulse 4s infinite alternate;
         }
-        @keyframes pulse { from { transform:scale(1); } to { transform:scale(1.05); } }
+        @keyframes pulse { 
+            from { transform:scale(1); opacity:0.7; } 
+            to { transform:scale(1.05); opacity:0.4; } 
+        }
         .hero-content {
             position:relative;
-            max-width:800px;
+            max-width:900px;
+            z-index:2;
         }
         .hero h1 {
-            font-size:3rem;
+            font-size:2.8rem;
+            font-weight:700;
             margin-bottom:1rem;
             background:linear-gradient(90deg,var(--accent),var(--accent2));
             -webkit-background-clip:text;
             -webkit-text-fill-color:transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .hero p {
             font-size:1.2rem;
-            margin-bottom:2rem;
+            margin-bottom:2.5rem;
             color:var(--muted);
-            max-width:600px;
+            max-width:700px;
             margin-left:auto;
             margin-right:auto;
+            line-height:1.7;
         }
         .btn {
-            display:inline-block;
+            display:inline-flex;
+            align-items:center;
+            gap:0.5rem;
             padding:0.9rem 1.8rem;
             font-size:1rem;
             font-weight:600;
@@ -96,14 +163,16 @@
             transition:var(--transition);
             position:relative;
             overflow:hidden;
+            font-family: inherit;
         }
         .btn-primary {
             background:linear-gradient(45deg,var(--accent),var(--accent2));
             color:#001;
             box-shadow:0 0 15px rgba(0,255,255,0.5);
+            border: none;
         }
         .btn-primary:hover {
-            transform:translateY(-3px);
+            transform:translateY(-3px) scale(1.02);
             box-shadow:0 0 25px rgba(0,255,255,0.8);
         }
         .btn-secondary {
@@ -116,8 +185,9 @@
             transform:translateY(-2px);
         }
         .features {
-            padding:4rem 2rem;
-            background:rgba(0,0,0,0.2);
+            padding:5rem 2rem;
+            background:rgba(0,0,0,0.15);
+            position:relative;
         }
         .section-title {
             text-align:center;
@@ -125,13 +195,14 @@
             margin-bottom:3rem;
             color:var(--accent);
             position:relative;
+            font-weight:600;
         }
         .section-title::after {
             content:'';
             display:block;
             width:80px;
             height:4px;
-            margin:0.5rem auto 0;
+            margin:0.75rem auto 0;
             background:linear-gradient(90deg,var(--accent),var(--accent2));
             border-radius:2px;
         }
@@ -152,19 +223,41 @@
             transition:var(--transition);
             position:relative;
             overflow:hidden;
+            height:100%;
+            display:flex;
+            flex-direction:column;
         }
         .card:hover {
             transform:translateY(-8px);
             box-shadow:0 0 30px rgba(0,255,255,0.4);
+            border-color: var(--accent);
         }
         .card-icon {
             font-size:2.5rem;
             margin-bottom:1.5rem;
             display:block;
+            width:60px;
+            height:60px;
+            margin-left:auto;
+            margin-right:auto;
+            background:rgba(0,255,255,0.1);
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
         }
         .card h3 {
             margin-bottom:1rem;
             color:var(--accent);
+            font-size:1.3rem;
+            font-weight:600;
+            flex-grow:1;
+        }
+        .card p {
+            flex-grow:1;
+            margin-bottom:1.5rem;
+            color:var(--muted);
+            line-height:1.6;
         }
         .form-section {
             background:var(--card);
@@ -175,11 +268,15 @@
             max-width:500px;
             margin:2rem auto;
             box-shadow:0 0 20px rgba(0,255,255,0.2);
+            position:relative;
+            z-index:10;
         }
         .form-section h2 {
             text-align:center;
             margin-bottom:1.5rem;
             color:var(--accent);
+            font-size:1.8rem;
+            font-weight:600;
         }
         .form-group {
             margin-bottom:1.5rem;
@@ -190,6 +287,7 @@
             margin-bottom:0.5rem;
             font-weight:500;
             color:var(--muted);
+            font-size:0.95rem;
         }
         .form-group input,
         .form-group select,
@@ -202,6 +300,7 @@
             color:#fff;
             font-size:1rem;
             transition:var(--transition);
+            font-family: inherit;
         }
         .form-group input:focus,
         .form-group select:focus,
@@ -209,6 +308,7 @@
             outline:none;
             border-color:var(--accent);
             box-shadow:0 0 8px rgba(0,255,255,0.5);
+            background:rgba(0,0,0,0.4);
         }
         .form-group textarea {
             min-height:100px;
@@ -219,12 +319,14 @@
             padding:1rem;
             font-size:1.1rem;
             font-weight:bold;
+            letter-spacing:0.5px;
         }
         #formResponse {
             margin-top:1rem;
             text-align:center;
             font-weight:600;
             min-height:1.5rem;
+            font-size:0.95rem;
         }
         footer {
             text-align:center;
@@ -234,13 +336,91 @@
             border-top:1px solid var(--border);
             margin-top:3rem;
         }
+        
+        /* Improved form layout */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+        
+        /* Location picker styling */
+        .location-picker {
+            position: relative;
+            margin-top: 0.5rem;
+        }
+        
+        .location-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+        
+        .location-input {
+            padding-left: 2.5rem !important;
+        }
+        
+        /* IC Input styling */
+        .ic-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .ic-prefix {
+            background: rgba(0,0,0,0.2);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px 0 0 8px;
+            border-right: 1px solid var(--border);
+            font-weight: 500;
+            color: var(--muted);
+        }
+        
+        /* Responsive adjustments */
         @media(max-width:768px){
             .hero h1{font-size:2.2rem;}
             .hero p{font-size:1rem;}
             header{flex-direction:column;gap:1rem;text-align:center;}
             nav ul{flex-wrap:wrap;justify-content:center;}
             .lang-switch{margin-top:0.5rem;}
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
+        
+        /* Animation for form elements */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-group {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+        .form-group:nth-child(8) { animation-delay: 0.8s; }
     </style>
 </head>
 <body>
@@ -299,34 +479,76 @@
     <div class="form-section" id="formSection" style="display:none;">
         <h2>Register Your Interest</h2>
         <form id="interestForm">
-            <div class="form-group">
-                <label for="name">Full Name *</label>
-                <input type="text" id="name" placeholder="Enter your full name" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="ic">Identity Card (IC) Number *</label>
+                    <div class="ic-input">
+                        <span class="ic-prefix">MY</span>
+                        <input type="text" id="ic" placeholder="123456-78-9012" required pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">Email Address *</label>
-                <input type="email" id="email" placeholder="you@example.com" required>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" placeholder="+60 xxx-xxxx" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" placeholder="+60 xxx-xxxx">
+            
+            <div class="form-group-full">
+                <label for="address">Address *</label>
+                <input type="text" id="address" placeholder="Enter your full address" required>
             </div>
-            <div class="form-group">
-                <label for="product">Product / Service Interest *</label>
-                <select id="product" required>
-                    <option value="">Select an option</option>
-                    <option value="Fiber Internet">Fiber Internet</option>
-                    <option value="Mobile Plan">Mobile Plan</option>
-                    <option value="Cloud Services">Cloud Services</option>
-                    <option value="Cybersecurity">Cybersecurity</option>
-                    <option value="VoIP Solutions">VoIP Solutions</option>
-                    <option value="Other">Other</option>
-                </select>
+            
+            <div class="form-group-full">
+                <label for="location">Location (with pinpoint) *</label>
+                <div class="location-picker">
+                    <span class="location-icon">📍</span>
+                    <input type="text" id="location" class="location-input" placeholder="Click to pinpoint your location on map" required readonly>
+                </div>
+                <small style="color: var(--muted); font-size: 0.85rem; display: block; margin-top: 0.25rem;">
+                    We'll use your location to provide the best service availability in your area
+                </small>
             </div>
-            <div class="form-group">
-                <label for="message">Additional Message</label>
-                <textarea id="message" placeholder="Any specific requirements or questions?"></textarea>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="product">Product / Service Interest *</label>
+                    <select id="product" required>
+                        <option value="">Select an option</option>
+                        <option value="Fiber Internet">Fiber Internet</option>
+                        <option value="Mobile Plan">Mobile Plan</option>
+                        <option value="Cloud Services">Cloud Services</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="VoIP Solutions">VoIP Solutions</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceType">Service Type</label>
+                    <select id="serviceType">
+                        <option value="">Select service type (optional)</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Business">Business</option>
+                        <option value="Enterprise">Enterprise</option>
+                    </select>
+                </div>
             </div>
+            
+            <div class="form-group-full">
+                <label for="message">Additional Message / Requirements</label>
+                <textarea id="message" placeholder="Any specific requirements, questions, or preferred contact time?"></textarea>
+            </div>
+            
             <button type="submit" class="submit-btn btn-primary">Submit Interest</button>
             <div id="formResponse"></div>
         </form>
@@ -345,22 +567,38 @@
         document.getElementById('interestForm').addEventListener('submit', function(e){
             e.preventDefault();
             const name = document.getElementById('name').value.trim();
+            const ic = document.getElementById('ic').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const location = document.getElementById('location').value.trim();
             const product = document.getElementById('product').value;
+            const serviceType = document.getElementById('serviceType').value;
             const message = document.getElementById('message').value.trim();
 
-            if(!name || !email || !product){
+            // Validation
+            if(!name || !ic || !email || !phone || !address || !location || !product){
                 showResponse('Please fill in all required fields.', 'error');
+                return;
+            }
+
+            // IC validation (simple pattern check)
+            const icPattern = /^[0-9]{6}-[0-9]{2}-[0-9]{4}$/;
+            if(!icPattern.test(ic)){
+                showResponse('Please enter a valid IC number (format: 123456-78-9012)', 'error');
                 return;
             }
 
             const data = {
                 timestamp: new Date().toISOString(),
                 name,
+                ic,
                 email,
                 phone,
+                address,
+                location,
                 product,
+                serviceType: serviceType || '',
                 message
             };
 
@@ -375,10 +613,29 @@
         function showResponse(msg, type){
             const resp = document.getElementById('formResponse');
             resp.textContent = msg;
-            resp.style.color = type === 'success' ? '#00ff88' : '#ff5555';
+            resp.style.color = type === 'success' ? var(--success) : var(--error);
             resp.style.fontWeight = '600';
             setTimeout(() => { resp.textContent = ''; }, 5000);
         }
+
+        // Location pinpoint simulation (in real app, this would integrate with Google Maps API)
+        document.getElementById('location').addEventListener('click', function() {
+            // Simulate location detection
+            const simulatedLocations = [
+                "Kuala Lumpur, Malaysia",
+                "Johor Bahru, Malaysia", 
+                "Penang, Malaysia",
+                "Melaka, Malaysia",
+                "Ipoh, Malaysia",
+                "Kota Kinabalu, Sabah",
+                "Kuching, Sarawak"
+            ];
+            
+            const randomLocation = simulatedLocations[Math.floor(Math.random() * simulatedLocations.length)];
+            this.value = randomLocation;
+            this.style.color = '#fff';
+            this.style.fontStyle = 'italic';
+        });
     </script>
 </body>
 </html>
