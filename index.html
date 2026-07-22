@@ -4,744 +4,1037 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eastel HQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
     <style>
         :root {
-            --bg: #00122b;
-            --card: rgba(10, 30, 60, 0.7);
-            --glass: rgba(255,255,255,0.08);
-            --border: rgba(255,255,255,0.15);
-            --accent: #00ffff;
-            --accent2: #ff00ff;
-            --text: #e0f7ff;
-            --muted: #a0c4d6;
-            --success: #00ff88;
-            --error: #ff5555;
+            --primary: #7456f1;
+            --primary-dark: #5e3fde;
+            --primary-light: #8a72f5;
+            --accent-pink: #E861B9;
+            --bg: #ffffff;
+            --bg-alt: #F3F5F7;
+            --bg-card: #FBFBFC;
+            --text: #102136;
+            --text-muted: #4d5d6d;
+            --text-light: #6b7f8f;
+            --border: #e2e6ea;
+            --success: #00c853;
+            --error: #ff1744;
             --radius: 16px;
+            --radius-sm: 8px;
             --transition: 0.3s ease;
-            --shadow: 0 8px 32px rgba(0,0,0,0.5);
-            --footer-bg: rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 20px rgba(116, 86, 241, 0.12);
+            --shadow-hover: 0 8px 32px rgba(116, 86, 241, 0.2);
+            --font: 'Hanken Grotesk', sans-serif;
+            --header-height: 80px;
         }
-        * { 
-            margin:0; 
-            padding:0; 
-            box-sizing:border-box; 
-        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #000428, #00122b);
+            font-family: var(--font);
+            background: var(--bg);
             color: var(--text);
-            min-height:100vh;
-            line-height:1.6;
+            min-height: 100vh;
+            line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
-        a { 
-            color:var(--accent); 
-            text-decoration:none; 
+
+        a { color: var(--primary); text-decoration: none; transition: var(--transition); }
+        a:hover { color: var(--primary-dark); }
+
+        /* ─── HEADER ─── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            height: var(--header-height);
+        }
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { display: flex; align-items: center; gap: 0.5rem; }
+        .logo svg { width: 42px; height: 42px; }
+        .logo-text { font-size: 1.5rem; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+
+        nav ul { display: flex; gap: 0.25rem; list-style: none; align-items: center; }
+        nav li a {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            position: relative;
+        }
+        nav li a:hover { background: var(--bg-alt); color: var(--primary); }
+
+        .dropdown { position: relative; }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow);
+            min-width: 180px;
+            padding: 0.5rem;
+            z-index: 100;
+        }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+        .dropdown-menu a:hover { background: var(--bg-alt); }
+
+        .header-right { display: flex; align-items: center; gap: 1rem; }
+        .header-right a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
             transition: var(--transition);
         }
-        a:hover { 
-            text-decoration:underline; 
-            color:var(--accent2);
-        }
-        header {
-            padding:1.5rem 2rem;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            flex-wrap:wrap;
-            background:var(--card);
-            backdrop-filter:blur(10px);
-            border-bottom:1px solid var(--border);
-            position:sticky;
-            top:0;
-            z-index:100;
-            box-shadow: var(--shadow);
-        }
-        .logo { 
-            font-size:1.8rem; 
-            font-weight:bold; 
-            background:linear-gradient(90deg,var(--accent),var(--accent2)); 
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-        }
-        nav ul { 
-            display:flex; 
-            gap:2rem; 
-            list-style:none; 
-        }
-        nav li a { 
-            font-weight:500; 
-            transition:var(--transition);
-            position:relative;
-        }
-        nav li a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            transition: width 0.3s ease;
-        }
-        nav li a:hover::after {
-            width: 100%;
-        }
-        .lang-switch { 
-            display:flex; 
-            gap:0.8rem; 
-            align-items:center; 
-        }
-        .lang-switch a { 
-            padding:0.3rem 0.6rem; 
-            border:1px solid var(--border); 
-            border-radius:8px; 
-            font-size:0.9rem; 
-            transition:var(--transition);
-            font-weight: 500;
-        }
-        .lang-switch a.active, 
-        .lang-switch a:hover { 
-            background:var(--glass); 
-            color:#fff;
-            border-color: var(--accent);
-        }
+        .header-right a:hover { background: var(--bg-alt); color: var(--primary); }
+        .lang-switch { display: flex; gap: 0.25rem; border-left: 1px solid var(--border); padding-left: 1rem; }
+        .lang-switch a { font-size: 0.85rem; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 4px; }
+        .lang-switch a.active { background: var(--primary); color: white; }
+
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text); padding: 0.5rem; }
+
+        /* ─── HERO ─── */
         .hero {
-            min-height:85vh;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            text-align:center;
-            padding:4rem 2rem 2rem;
-            position:relative;
-            overflow:hidden;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
         }
         .hero::before {
-            content:'';
-            position:absolute;
-            inset:0;
-            background:radial-gradient(circle at center, rgba(0,255,255,0.1), transparent 70%);
-            pointer-events:none;
-            animation:pulse 4s infinite alternate;
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1), transparent 60%);
+            pointer-events: none;
         }
-        @keyframes pulse { 
-            from { transform:scale(1); opacity:0.7; } 
-            to { transform:scale(1.05); opacity:0.4; } 
-        }
-        .hero-content {
-            position:relative;
-            max-width:900px;
-            z-index:2;
-        }
-        .hero h1 {
-            font-size:2.8rem;
-            font-weight:700;
-            margin-bottom:1rem;
-            background:linear-gradient(90deg,var(--accent),var(--accent2));
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .hero p {
-            font-size:1.2rem;
-            margin-bottom:2.5rem;
-            color:var(--muted);
-            max-width:700px;
-            margin-left:auto;
-            margin-right:auto;
-            line-height:1.7;
-        }
-        .btn {
-            display:inline-flex;
-            align-items:center;
-            gap:0.5rem;
-            padding:0.9rem 1.8rem;
-            font-size:1rem;
-            font-weight:600;
-            border:none;
-            border-radius:50px;
-            cursor:pointer;
-            transition:var(--transition);
-            position:relative;
-            overflow:hidden;
-            font-family: inherit;
-        }
-        .btn-primary {
-            background:linear-gradient(45deg,var(--accent),var(--accent2));
-            color:#001;
-            box-shadow:0 0 15px rgba(0,255,255,0.5);
-            border: none;
-        }
-        .btn-primary:hover {
-            transform:translateY(-3px) scale(1.02);
-            box-shadow:0 0 25px rgba(0,255,255,0.8);
-        }
-        .btn-secondary {
-            background:var(--glass);
-            color:var(--text);
-            border:1px solid var(--border);
-        }
-        .btn-secondary:hover {
-            background:rgba(255,255,255,0.15);
-            transform:translateY(-2px);
-        }
-        .features {
-            padding:5rem 2rem;
-            background:rgba(0,0,0,0.15);
-            position:relative;
-        }
-        .section-title {
-            text-align:center;
-            font-size:2.2rem;
-            margin-bottom:3rem;
-            color:var(--accent);
-            position:relative;
-            font-weight:600;
-        }
-        .section-title::after {
-            content:'';
-            display:block;
-            width:80px;
-            height:4px;
-            margin:0.75rem auto 0;
-            background:linear-gradient(90deg,var(--accent),var(--accent2));
-            border-radius:2px;
-        }
-        .cards {
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-            gap:2rem;
-            max-width:1200px;
-            margin:0 auto;
-        }
-        .card {
-            background:var(--card);
-            backdrop-filter:blur(10px);
-            border:1px solid var(--border);
-            border-radius:var(--radius);
-            padding:2rem;
-            text-align:center;
-            transition:var(--transition);
-            position:relative;
-            overflow:hidden;
-            height:100%;
-            display:flex;
-            flex-direction:column;
-        }
-        .card:hover {
-            transform:translateY(-8px);
-            box-shadow:0 0 30px rgba(0,255,255,0.4);
-            border-color: var(--accent);
-        }
-        .card-icon {
-            font-size:2.5rem;
-            margin-bottom:1.5rem;
-            display:block;
-            width:60px;
-            height:60px;
-            margin-left:auto;
-            margin-right:auto;
-            background:rgba(0,255,255,0.1);
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        }
-        .card h3 {
-            margin-bottom:1rem;
-            color:var(--accent);
-            font-size:1.3rem;
-            font-weight:600;
-            flex-grow:1;
-        }
-        .card p {
-            flex-grow:1;
-            margin-bottom:1.5rem;
-            color:var(--muted);
-            line-height:1.6;
-        }
-        .faq-section {
-            padding:5rem 2rem;
-            background:rgba(0,0,0,0.1);
-        }
-        .faq-item {
-            background:var(--card);
-            backdrop-filter:blur(10px);
-            border:1px solid var(--border);
-            border-radius:var(--radius);
-            margin-bottom:1rem;
-            overflow:hidden;
-        }
-        .faq-question {
-            padding:1.5rem 2rem;
-            background:var(--glass);
-            cursor:pointer;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            transition:var(--transition);
-        }
-        .faq-question:hover {
-            background:rgba(255,255,255,0.12);
-        }
-        .faq-question h3 {
-            margin:0;
-            color:var(--accent);
-            font-size:1.1rem;
-            font-weight:600;
-        }
-        .faq-answer {
-            max-height:0;
-            overflow:hidden;
-            transition:max-height 0.3s ease;
-            background:var(--card);
-            backdrop-filter:blur(10px);
-            border-top:1px solid var(--border);
-        }
-        .faq-answer p {
-            padding:1.5rem 2rem;
-            color:var(--muted);
-            line-height:1.6;
-        }
-        .faq-item.active .faq-answer {
-            max-height:200px;
-        }
-        .faq-icon {
-            transition:transform 0.3s ease;
-        }
-        .faq-item.active .faq-icon {
-            transform:rotate(180deg);
-        }
-        .form-section {
-            background:var(--card);
-            backdrop-filter:blur(10px);
-            border:1px solid var(--border);
-            border-radius:var(--radius);
-            padding:2.5rem;
-            max-width:500px;
-            margin:2rem auto;
-            box-shadow:0 0 20px rgba(0,255,255,0.2);
-            position:relative;
-            z-index:10;
-        }
-        .form-section h2 {
-            text-align:center;
-            margin-bottom:1.5rem;
-            color:var(--accent);
-            font-size:1.8rem;
-            font-weight:600;
-        }
-        .form-group {
-            margin-bottom:1.5rem;
-            text-align:left;
-        }
-        .form-group label {
-            display:block;
-            margin-bottom:0.5rem;
-            font-weight:500;
-            color:var(--muted);
-            font-size:0.95rem;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width:100%;
-            padding:0.8rem;
-            background:rgba(0,0,0,0.3);
-            border:1px solid var(--border);
-            border-radius:8px;
-            color:#fff;
-            font-size:1rem;
-            transition:var(--transition);
-            font-family: inherit;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline:none;
-            border-color:var(--accent);
-            box-shadow:0 0 8px rgba(0,255,255,0.5);
-            background:rgba(0,0,0,0.4);
-        }
-        .form-group textarea {
-            min-height:100px;
-            resize:vertical;
-        }
-        .submit-btn {
-            width:100%;
-            padding:1rem;
-            font-size:1.1rem;
-            font-weight:bold;
-            letter-spacing:0.5px;
-        }
-        #formResponse {
-            margin-top:1rem;
-            text-align:center;
-            font-weight:600;
-            min-height:1.5rem;
-            font-size:0.95rem;
-        }
-        footer {
-            background:var(--footer-bg);
-            backdrop-filter:blur(10px);
-            border-top:1px solid var(--border);
-            padding:3rem 2rem 2rem;
-            margin-top:4rem;
-        }
-        .footer-content {
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-            gap:2rem;
-            margin-bottom:2rem;
-        }
-        .footer-column h3 {
-            margin-bottom:1.5rem;
-            color:var(--accent);
-            font-size:1.2rem;
-            font-weight:600;
-            position:relative;
-        }
-        .footer-column h3::after {
-            content:'';
-            display:block;
-            width:40px;
-            height:2px;
-            margin-top:0.5rem;
-            background:linear-gradient(90deg,var(--accent),var(--accent2));
-            border-radius:1px;
-        }
-        .footer-column ul {
-            list-style:none;
-        }
-        .footer-column li {
-            margin-bottom:0.75rem;
-        }
-        .footer-column a {
-            color:var(--muted);
-            font-size:0.9rem;
-            display:block;
-            padding:0.25rem 0;
-            transition:var(--transition);
-        }
-        .footer-column a:hover {
-            color:var(--text);
-            padding-left:0.5rem;
-        }
-        .social-links {
-            display:flex;
-            gap:1rem;
-            margin-top:1rem;
-        }
-        .social-links a {
-            width:40px;
-            height:40px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            background:var(--glass);
-            border-radius:50%;
-            transition:var(--transition);
-        }
-        .social-links a:hover {
-            background:var(--accent);
-            color:#000;
-            transform:translateY(-3px);
-        }
-        .app-store {
-            display:flex;
-            gap:1rem;
-            margin-top:1.5rem;
-        }
-        .app-store img {
-            height:40px;
-            transition:var(--transition);
-        }
-        .app-store img:hover {
-            transform:scale(1.05);
-        }
-        .footer-bottom {
-            text-align:center;
-            padding-top:1.5rem;
-            border-top:1px solid var(--border);
-            color:var(--muted);
-            font-size:0.85rem;
-        }
-        .form-row {
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1280px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            width: 100%;
+        }
+        .hero-left h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+        .hero-left p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            line-height: 1.7;
+        }
+        .hero-left .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .hero-left .hero-stats .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+        }
+        .hero-left .hero-stats .label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .hero .btn-primary-white {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .hero .btn-primary-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        /* ─── DASHBOARD FORM ─── */
+        .dash-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+        }
+        .dash-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+        .dash-card .dash-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
             margin-bottom: 1.5rem;
         }
-        .form-group-full {
-            grid-column: 1 / -1;
+        .dash-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
         }
-        .location-picker {
+        .dash-card .form-group {
+            margin-bottom: 0;
+        }
+        .dash-card .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+            display: block;
+        }
+        .dash-card .form-group input,
+        .dash-card .form-group select,
+        .dash-card .form-group textarea {
+            width: 100%; padding: 0.6rem 0.8rem; background: var(--bg-alt); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); color: var(--text); font-size: 0.88rem; font-family: var(--font);
+            transition: var(--transition);
+        }
+        .dash-card .form-group input:focus,
+        .dash-card .form-group select:focus,
+        .dash-card .form-group textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(116,86,241,0.1); background: white;
+        }
+        .dash-card .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .dash-card .ic-input {
+            display: flex;
+            align-items: center;
+        }
+        .dash-card .ic-input .prefix {
+            background: var(--bg-alt); padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-right: none;
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm); font-weight: 600; color: var(--primary); font-size: 0.85rem; line-height: 1;
+        }
+        .dash-card .ic-input input {
+            border-radius: 0 !important;
+        }
+        .dash-card .ic-input .scan-btn {
+            background: var(--primary); color: white; border: none; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 0 0.7rem; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; line-height: 1;
+        }
+        .dash-card .location-picker {
             position: relative;
-            margin-top: 0.5rem;
         }
-        .location-icon {
+        .dash-card .location-picker .icon {
             position: absolute;
-            left: 1rem;
+            left: 0.7rem;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--muted);
-            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
         }
-        .location-input {
-            padding-left: 2.5rem !important;
+        .dash-card .location-picker input {
+            padding-left: 2rem !important;
+            cursor: pointer;
         }
-        .ic-input {
+        .dash-card .submit-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+        .dash-card .submit-row .btn {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.9rem;
+        }
+        .dash-card .submit-row .btn i {
+            font-size: 0.85rem;
+        }
+        .dash-card .form-response {
+            font-size: 0.8rem;
+            font-weight: 600;
+            min-height: 1.2rem;
+            text-align: left;
+            flex: 1;
+        }
+        .dash-form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .btn-secondary {
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+        .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+        /* ─── SECTIONS ─── */
+        section { padding: 5rem 2rem; }
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ─── SERVICE CARDS ─── */
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-card {
+            background: var(--bg-alt);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+        .service-card .icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+        .service-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .service-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+        .service-card .btn { margin-top: 1.5rem; }
+
+        /* ─── WHY EASTEL ─── */
+        .why-eastel { background: var(--bg-alt); }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        .feature-card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+        .feature-card .icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+        }
+        .feature-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .feature-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+        /* ─── MOBILE PLANS ─── */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .plan-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+        }
+        .plan-card.featured {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+        .plan-card.featured::before {
+            content: 'POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            letter-spacing: 1px;
+        }
+        .plan-card:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+        .plan-card .price {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .plan-card .price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
+        .plan-card ul { list-style: none; margin: 1.5rem 0; text-align: left; }
+        .plan-card ul li {
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .ic-prefix {
-            background: rgba(0,0,0,0.2);
-            padding: 0.5rem 0.8rem;
-            border-radius: 8px 0 0 8px;
-            border-right: 1px solid var(--border);
-            font-weight: 500;
-            color: var(--muted);
+        .plan-card ul li i { color: var(--primary); font-size: 0.8rem; }
+        .plan-card .btn { width: 100%; justify-content: center; }
+
+        /* ─── FAQ ─── */
+        .faq-section { background: var(--bg-alt); }
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.75rem;
+            overflow: hidden;
         }
-        @media(max-width:768px){
-            .hero h1{font-size:2.2rem;}
-            .hero p{font-size:1rem;}
-            header{flex-direction:column;gap:1rem;text-align:center;}
-            nav ul{flex-wrap:wrap;justify-content:center;}
-            .lang-switch{margin-top:0.5rem;}
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
+        .faq-question {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
         }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .faq-question:hover { background: var(--bg-alt); }
+        .faq-question i { transition: transform 0.3s ease; color: var(--primary); font-size: 0.85rem; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
-        .form-group, .faq-item, .card {
-            animation: fadeInUp 0.5s ease forwards;
-            opacity: 0;
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 1.5rem 1.25rem;
         }
-        .form-group:nth-child(1) { animation-delay: 0.1s; }
-        .form-group:nth-child(2) { animation-delay: 0.2s; }
-        .form-group:nth-child(3) { animation-delay: 0.3s; }
-        .form-group:nth-child(4) { animation-delay: 0.4s; }
-        .form-group:nth-child(5) { animation-delay: 0.5s; }
-        .form-group:nth-child(6) { animation-delay: 0.6s; }
-        .form-group:nth-child(7) { animation-delay: 0.7s; }
-        .form-group:nth-child(8) { animation-delay: 0.8s; }
-        .faq-item:nth-child(1) { animation-delay: 0.9s; }
-        .faq-item:nth-child(2) { animation-delay: 1.0s; }
-        .faq-item:nth-child(3) { animation-delay: 1.1s; }
-        .card:nth-child(1) { animation-delay: 1.2s; }
-        .card:nth-child(2) { animation-delay: 1.3s; }
-        .card:nth-child(3) { animation-delay: 1.4s; }
-        .card:nth-child(4) { animation-delay: 1.5s; }
+
+        /* ─── DOWNLOAD APP ─── */
+        .download-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            text-align: center;
+            color: white;
+        }
+        .download-section h2 { color: white; }
+        .download-section p { color: rgba(255,255,255,0.8); }
+        .app-badges { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+        .app-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .app-badge:hover { background: rgba(255,255,255,0.25); color: white; transform: translateY(-2px); }
+        .app-badge i { font-size: 1.5rem; }
+
+        .form-response { margin-top: 1rem; text-align: center; font-weight: 600; min-height: 1.5rem; font-size: 0.9rem; }
+
+        /* ─── SCAN OVERLAY ─── */
+        #scanOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 2rem;
+        }
+        #scanOverlay.show { display: flex; }
+        #scanOverlay img {
+            max-width: 90vw;
+            max-height: 60vh;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin-bottom: 1.5rem;
+        }
+        #scanOverlay .scan-status {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        #scanOverlay .scan-status i { margin-right: 0.5rem; }
+        #scanOverlay .scan-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: #0a0c1a;
+            color: rgba(255,255,255,0.7);
+            padding: 4rem 2rem 2rem;
+        }
+        .footer-inner { max-width: 1280px; margin: 0 auto; }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        .footer-col h4 {
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 0.6rem; }
+        .footer-col a {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        .footer-col a:hover { color: white; padding-left: 4px; }
+        .social-links { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        .social-links a:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ─── MOBILE ─── */
+        @media(max-width: 768px) {
+            .header-inner { padding: 0 1rem; }
+            nav { display: none; }
+            nav.open { display: block; position: absolute; top: var(--header-height); left: 0; right: 0; background: white; border-bottom: 1px solid var(--border); padding: 1rem; box-shadow: var(--shadow); }
+            nav.open ul { flex-direction: column; gap: 0.25rem; }
+            nav.open ul li a { display: block; padding: 0.75rem 1rem; }
+            .dropdown-menu { position: static; box-shadow: none; border: none; padding-left: 1rem; display: none; }
+            .dropdown.open .dropdown-menu { display: block; }
+            .header-right { gap: 0.5rem; }
+            .header-right a { font-size: 0.8rem; padding: 0.3rem 0.5rem; }
+            .menu-toggle { display: block; }
+
+            .hero { min-height: auto; padding: 4rem 1rem 3rem; }
+            .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+            .hero-left h1 { font-size: 2rem; }
+            .hero-left p { font-size: 1rem; }
+            .hero-left .hero-stats { gap: 1.5rem; }
+            .hero-left .hero-stats .num { font-size: 1.4rem; }
+            .dash-row { grid-template-columns: 1fr; }
+            .dash-card { padding: 1.25rem; }
+
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+
+        @media(max-width: 480px) {
+            section { padding: 3rem 1rem; }
+            .section-title { font-size: 1.5rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .header-right a:not(.lang-switch a) { display: none; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Eastel</div>
-        <nav>
+
+<header>
+    <div class="header-inner">
+        <div class="logo">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#7456f1" d="M32.7,50.1h8.4c1,0,1.7.9,1.6,1.9h0c-.1.8-.8,1.3-1.6,1.3h-7l-.8,4.4h5.6c1,0,1.7.9,1.6,1.9h0c-.1.8-.8,1.3-1.6,1.3h-6.2l-.8,4.6h6.7c1,0,1.8.9,1.6,1.9h0c-.1.8-.8,1.3-1.6,1.3h-9c-1,0-1.7-.9-1.6-1.9l2.6-15c.2-1,1.1-1.7,2.1-1.7Z"/>
+                <path fill="#7456f1" d="M54.6,58.3l-1.6,9.2c-.1.7-.7,1.2-1.4,1.2h0c-.8,0-1.5-.7-1.4-1.5h0c-.5.6-1.1,1.1-1.7,1.4-.6.3-1.3.4-2,.4s-1.8-.2-2.5-.7c-.7-.5-1.3-1.1-1.7-1.9-.4-.8-.6-1.8-.6-2.9s0-1,.1-1.5c.2-1.3.6-2.3,1.3-3.2.6-.9,1.3-1.5,2.2-1.9.8-.4,1.7-.6,2.6-.6s1.6.2,2.3.6c.6.4,1.1.9,1.4,1.7,0-.2.2-.5.3-.9.2-.6.8-1.1,1.4-1.1h0c.9,0,1.6.8,1.4,1.7ZM48.8,65.3c.6-.5,1-1.3,1.2-2.4,0-.3,0-.6,0-1,0-.9-.2-1.6-.7-2.1-.5-.5-1.1-.7-1.8-.7s-1.4.3-2,.8c-.6.5-.9,1.3-1.1,2.3,0,.3,0,.6,0,1,0,.9.2,1.6.7,2.1.4.5,1,.8,1.8.8s1.4-.2,2-.7Z"/>
+                <path fill="#7456f1" d="M62.9,68.2c-.9.6-1.9.8-3.2.8s-2.6-.3-3.5-1c-.5-.3-.8-.7-1.1-1.2-.4-.7-.1-1.7.7-2h0c.6-.3,1.4,0,1.7.5.1.2.3.4.5.5.5.4,1,.6,1.7.6s.8,0,1.1-.3c.3-.2.4-.4.4-.8s-.2-.6-.5-.8c-.3-.2-.9-.5-1.6-.8-.7-.3-1.3-.6-1.7-.8-.4-.2-.8-.6-1.1-1-.3-.4-.5-.9-.5-1.5s0-.5,0-.6c.2-1.1.7-2,1.7-2.6.9-.6,2-.9,3.2-.9s1.6.1,2.2.4c.7.3,1.2.7,1.6,1.2,0,0,0,0,0,0,.6.7.3,1.8-.6,2.1h0c-.6.3-1.3.2-1.7-.3,0-.1-.2-.2-.3-.3-.4-.3-.8-.5-1.4-.5s-.7,0-.9.2c-.3.2-.5.5-.5.8,0,.3.2.6.5.8.3.2.8.5,1.5.7.7.3,1.3.6,1.8.8.5.2.8.6,1.2,1,.3.4.5,1,.5,1.6s0,.4,0,.7c-.2,1.1-.7,1.9-1.6,2.5Z"/>
+                <path fill="#7456f1" d="M73.8,59.3h-2.5l-.8,4.5c0,.3,0,.6,0,.8,0,.5.1.9.4,1.2.2.2.6.4,1.1.4s.3,0,.5,0c.6-.1,1.3.2,1.5.8h0c.3.8-.2,1.6-.9,1.8,0,0,0,0,0,0-.5.1-1,.2-1.6.2-1.2,0-2.2-.3-2.9-.8-.8-.6-1.2-1.5-1.2-2.8s0-.8.1-1.3l.8-4.8h-.5c-.9,0-1.5-.8-1.3-1.6h0c.1-.7.7-1.1,1.3-1.1h1l.4-2.4c.1-.8.8-1.3,1.6-1.3h0c1,0,1.7.9,1.6,1.9l-.3,1.8h2c.9,0,1.5.8,1.3,1.6h0c-.1.7-.7,1.1-1.3,1.1Z"/>
+                <path fill="#7456f1" d="M82.4,65.8c.2-.1.4-.2.5-.4.5-.4,1.2-.4,1.7,0h0c.7.5.8,1.6,0,2.2-.3.3-.7.5-1.1.7-1,.5-2,.7-3.1.7s-1.9-.2-2.7-.6c-.8-.4-1.5-1-1.9-1.9-.5-.8-.7-1.8-.7-2.9s0-.9.1-1.4c.2-1.3.7-2.4,1.4-3.3.7-.9,1.5-1.5,2.5-2,1-.4,2-.6,3-.6s2.5.3,3.3,1c.8.7,1.2,1.5,1.2,2.6,0,2.4-2.1,3.7-6.3,3.7s-1.2,0-1.9,0c0,.9.2,1.5.7,2,.4.5,1,.7,1.8.7s1.1-.1,1.5-.4ZM80.1,59.5c-.6.4-1,1-1.3,1.7.8,0,1.4,0,1.7,0,1.9,0,2.8-.5,2.8-1.4s-.1-.6-.4-.8c-.2-.2-.6-.3-1-.3-.7,0-1.3.2-1.9.6Z"/>
+                <path fill="#7456f1" d="M88.2,68.7h0c-1,0-1.7-.9-1.6-1.9l2.6-14.6c.1-.8.8-1.3,1.6-1.3h0c1,0,1.7.9,1.6,1.9l-2.6,14.6c-.1.8-.8,1.3-1.6,1.3Z"/>
+                <path fill="#7456f1" d="M9.4,68.2c-.4-1,.1-2,1.1-2.4h0c1-.4,2,.1,2.4,1.1h0c.4,1-.1,2-1.1,2.4h0c-.2,0-.4.1-.7.1h0c-.7,0-1.4-.5-1.7-1.2Z"/>
+                <path fill="#7456f1" d="M7.7,60.5c0-1,.7-1.9,1.7-2h0c1,0,1.9.7,2,1.7h0c0,1-.7,1.9-1.7,2h0s0,0-.1,0h0c-1,0-1.8-.7-1.8-1.7Z"/>
+                <path fill="#7456f1" d="M9.6,54.7c-1-.2-1.6-1.2-1.4-2.2h0c.2-1,1.2-1.6,2.2-1.4h0c1,.2,1.6,1.2,1.4,2.2h0c-.2.9-.9,1.5-1.8,1.5h0c-.1,0-.3,0-.4,0Z"/>
+                <path fill="#7456f1" d="M58.1,49.6c-.4-1,.1-2,1.1-2.4h0c1-.4,2,.1,2.4,1.1h0c.4,1-.1,2-1.1,2.4h0c-.2,0-.4.1-.7.1h0c-.7,0-1.4-.5-1.7-1.2Z"/>
+                <path fill="#7456f1" d="M11.6,47.6c-.9-.5-1.2-1.6-.8-2.5h0c.5-.9,1.6-1.2,2.5-.8h0c.9.5,1.2,1.6.8,2.5h0c-.3.6-1,1-1.6,1h0c-.3,0-.6,0-.9-.2Z"/>
+            </svg>
+            <span class="logo-text">Eastel</span>
+        </div>
+
+        <nav id="mainNav">
             <ul>
-                <li><a href="#home">Consumer</a></li>
-                <li><a href="#about">EASTELpreneurs</a></li>
-                <li><a href="#services">Business</a></li>
-                <li><a href="#contact">Lifestyle</a></li>
-                <li><a href="#footer">Contact Us</a></li>
+                <li class="dropdown">
+                    <a href="#">Consumer <i class="fas fa-chevron-down" style="font-size:0.7rem;margin-left:4px;"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="#">Mobile Plan</a>
+                        <a href="#">IDD</a>
+                        <a href="#">Roaming</a>
+                    </div>
+                </li>
+                <li><a href="#">EASTELpreneurs</a></li>
+                <li><a href="#">Business</a></li>
+                <li><a href="#">Lifestyle</a></li>
+                <li><a href="#">Contact Us</a></li>
             </ul>
         </nav>
-        <div class="lang-switch">
-            <a href="#" class="active">EN</a>
-            <a href="#">MS</a>
-        </div>
-    </header>
 
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>GET STARTED WITH EASTEL</h1>
-            <p>Experience next‑generation connectivity and innovative digital solutions tailored for modern lifestyles.</p>
-            <button class="btn btn-primary" id="openForm">Explore Plans</button>
-            <button class="btn btn-secondary">Learn More</button>
+        <div class="header-right">
+            <a href="#"><i class="fas fa-user"></i> My Account</a>
+            <a href="#">FAQ</a>
+            <div class="lang-switch">
+                <a href="#" class="active">EN</a>
+                <a href="#">MS</a>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-    </section>
-
-    <section class="features">
-        <h2 class="section-title">Our Core Services</h2>
-        <div class="cards">
-            <div class="card">
-                <div class="card-icon">📶</div>
-                <h3>High‑Speed Internet</h3>
-                <p>Ultra‑reliable fiber and wireless plans with speeds up to 1 Gbps for home and business.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">☁️</div>
-                <h3>Cloud &amp; Hosting</h3>
-                <p>Secure cloud infrastructure, VPS, and managed services designed for scalability.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">🛡️</div>
-                <h3>Cybersecurity</h3>
-                <p>Advanced threat protection, firewall management, and 24/7 monitoring to keep your data safe.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">💬</div>
-                <h3>VoIP &amp; Communication</h3>
-                <p>Crystal‑clear voice over IP solutions with flexible plans for enterprises.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="faq-section">
-        <h2 class="section-title">Frequently Asked Questions</h2>
-        <div class="faq-item">
-            <div class="faq-question">
-                <h3>What internet speeds do you offer?</h3>
-                <span class="faq-icon">▼</span></h3>
-            </div>
-            <div class="faq-answer">
-                <p>For basic browsing and email, 25-50 Mbps is sufficient. For 4K streaming and online gaming, we recommend 100-200 Mbps. For large households with multiple devices, 500 Mbps to 1 Gbps ensures smooth performance for everyone.</p>
-            </div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question">
-                <h3>How long does installation take? <span class="faq-icon">▼</span></h3>
-            </div>
-            <div class="faq-answer">
-                <p>Standard installations typically take 2-4 hours. Complex setups or custom configurations may require additional time. Our technicians will provide an accurate estimate during the site survey.</p>
-            </div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question">
-                <h3>What is your contract policy? <span class="faq-icon">▼</span></h3>
-            </div>
-            <div class="faq-answer">
-                <p>We offer both contract and no-contract options. Contract plans (12-24 months) often include promotional pricing and free equipment. No-contract plans provide flexibility with month-to-month billing but may have higher monthly rates.</p>
-            </div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question">
-                <h3>Do you offer technical support? <span class="faq-icon">▼</span></h3>
-            </div>
-            <div class="faq-answer">
-                <p>Yes! We provide 24/7 technical support via phone, email, and live chat. Our support team is based in Malaysia and understands local infrastructure challenges to provide faster resolutions.</p>
-            </div>
-        </div>
-    </section>
-
-    <div class="form-section" id="formSection" style="display:none;">
-        <h2>Register Your Interest</h2>
-        <form id="interestForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="name">Full Name *</label>
-                    <input type="text" id="name" placeholder="Enter your full name" required>
-                </div>
-                <div class="form-group">
-                    <label for="ic">Identity Card (IC) Number *</label>
-                    <div class="ic-input">
-                        <span class="ic-prefix">MY</span>
-                        <input type="text" id="ic" placeholder="123456-78-9012" required pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" placeholder="+60 xxx-xxxx" required>
-                </div>
-            </div>
-            
-            <div class="form-group-full">
-                <label for="address">Address *</label>
-                <input type="text" id="address" placeholder="Enter your full address" required>
-            </div>
-            
-            <div class="form-group-full">
-                <label for="location">Location (with pinpoint) *</label>
-                <div class="location-picker">
-                    <span class="location-icon">📍</span>
-                    <input type="text" id="location" class="location-input" placeholder="Click to pinpoint your location on map" required readonly>
-                </div>
-                <small style="color: var(--muted); font-size: 0.85rem; display: block; margin-top: 0.25rem;">
-                    We'll use your location to provide the best service availability in your area
-                </small>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="product">Product / Service Interest *</label>
-                    <select id="product" required>
-                        <option value="">Select an option</option>
-                        <option value="Fiber Internet">Fiber Internet</option>
-                        <option value="Mobile Plan">Mobile Plan</option>
-                        <option value="Cloud Services">Cloud Services</option>
-                        <option value="Cybersecurity">Cybersecurity</option>
-                        <option value="VoIP Solutions">VoIP Solutions</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="serviceType">Service Type</label>
-                    <select id="serviceType">
-                        <option value="">Select service type (optional)</option>
-                        <option value="Residential">Residential</option>
-                        <option value="Business">Business</option>
-                        <option value="Enterprise">Enterprise</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-group-full">
-                <label for="message">Additional Message / Requirements</label>
-                <textarea id="message" placeholder="Any specific requirements, questions, or preferred contact time?"></textarea>
-            </div>
-            
-            <button type="submit" class="submit-btn btn-primary">Submit Interest</button>
-            <div id="formResponse"></div>
-        </form>
     </div>
+</header>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-column">
-                <h3>About Eastel</h3>
+<main>
+    <!-- ─── HERO DASHBOARD ─── -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-left">
+                <h1>Kick into the Speed of Data</h1>
+                <p>Stay connected on every ride, powered by ultra-fast data with Eastel's next-generation network.</p>
+                <div class="hero-stats">
+                    <div><div class="num">5G</div><div class="label">Network</div></div>
+                    <div><div class="num">+60</div><div class="label">Cities</div></div>
+                    <div><div class="num">24/7</div><div class="label">Support</div></div>
+                </div>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="#" class="btn btn-primary-white" id="heroPlansBtn">View Plans <i class="fas fa-arrow-right"></i></a>
+                    <a href="#services" class="btn btn-outline">Our Services</a>
+                </div>
+            </div>
+            <div>
+                <div class="dash-card" id="dashForm">
+                    <h3>Quick Registration</h3>
+                    <div class="dash-sub">Sign up in seconds — get connected instantly</div>
+                    <form id="interestForm">
+                        <div class="dash-row">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" placeholder="Your name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone *</label>
+                                <input type="tel" id="phone" placeholder="+60 xxx-xxxx" required>
+                            </div>
+                        </div>
+                        <div class="dash-row">
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" placeholder="you@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ic">IC Number *</label>
+                                <div class="ic-input">
+                                    <span class="prefix">MY</span>
+                                    <input type="text" id="ic" placeholder="123456-78-9012" required pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}">
+                                    <button type="button" class="scan-btn" id="scanIcBtn" title="Scan IC"><i class="fas fa-camera"></i> Scan</button>
+                                    <input type="file" id="icFileInput" accept="image/*" capture="environment" style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dash-row">
+                            <div class="form-group">
+                                <label for="product">Interest *</label>
+                                <select id="product" required>
+                                    <option value="">Select...</option>
+                                    <option value="Mobile Plan">Mobile Plan</option>
+                                    <option value="IDD">IDD</option>
+                                    <option value="Roaming">Roaming</option>
+                                    <option value="EASTELpreneurs">EASTELpreneurs</option>
+                                    <option value="Business Solutions">Business Solutions</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <div class="location-picker">
+                                    <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                                    <input type="text" id="location" placeholder="Tap to detect GPS" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dash-form-group-full" style="margin-bottom:0.75rem;">
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" id="address" placeholder="Your full address" required>
+                            </div>
+                        </div>
+                        <div class="submit-row">
+                            <button type="submit" class="btn btn-primary" style="background:var(--primary);">Submit <i class="fas fa-arrow-right"></i></button>
+                            <div class="form-response" id="formResponse"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── SERVICE CARDS ─── -->
+    <section id="services">
+        <h2 class="section-title">Get started with Eastel</h2>
+        <p class="section-subtitle">Discover solutions tailored for every need — from personal connectivity to business growth.</p>
+        <div class="service-cards">
+            <div class="service-card">
+                <div class="icon"><i class="fas fa-user-plus"></i></div>
+                <h3>Eastelpreneurs</h3>
+                <p>Earn up to 24% incentives. Stay active, grow your network and get rewarded with our referral programme.</p>
+                <a href="#" class="btn btn-primary">Join Now</a>
+            </div>
+            <div class="service-card">
+                <div class="icon"><i class="fas fa-briefcase"></i></div>
+                <h3>Business Solutions</h3>
+                <p>IoT solutions, SME packages, co-branding partnerships, and integrated device bundles for enterprises.</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+            <div class="service-card">
+                <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Mobile Plans</h3>
+                <p>Prepaid and postpaid plans with massive data, free roaming, unlimited calls and full hotspot support.</p>
+                <a href="#" class="btn btn-primary">View Plans</a>
+            </div>
+            <div class="service-card">
+                <div class="icon"><i class="fas fa-download"></i></div>
+                <h3>Download Eastel App</h3>
+                <p>Manage your account, onboard new prospects, reload and track rewards anytime, anywhere.</p>
+                <a href="#" class="btn btn-primary">Download</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── WHY EASTEL ─── -->
+    <section class="why-eastel" id="why">
+        <h2 class="section-title">WHY EASTEL?</h2>
+        <p class="section-subtitle">EASTEL empowers you to earn rewards while staying connected</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-bolt"></i></div>
+                <div>
+                    <h4>Eastel Fast 5G Internet</h4>
+                    <p>Experience fast and reliable 5G for smooth gaming and streaming.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-globe"></i></div>
+                <div>
+                    <h4>1st PREPAID with Free International Roaming</h4>
+                    <p>Ultra Fast Mobile Plans with Free International Data Roaming.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-coins"></i></div>
+                <div>
+                    <h4>Up to 24% Incentives</h4>
+                    <p>Earn up to 24% incentives. Stay active, grow your network and get rewarded.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-wallet"></i></div>
+                <div>
+                    <h4>Eastel Wallet</h4>
+                    <p>Your secure digital wallet for reloads, rewards, incentive and everyday lifestyle essentials.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-gift"></i></div>
+                <div>
+                    <h4>eCOMM</h4>
+                    <p>Eastelpreneur loyalty rewards.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-percent"></i></div>
+                <div>
+                    <h4>Cashback Rebate</h4>
+                    <p>Limited-time offer — SIAPA CEPAT! SIAPA DAPAT!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── MOBILE PLANS ─── -->
+    <section id="plans">
+        <h2 class="section-title">Mobile Plans</h2>
+        <p class="section-subtitle">Choose the plan that fits your lifestyle</p>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="price">RM 50 <span>/month</span></div>
                 <ul>
-                    <li><a href="#home">Our Story</a></li>
-                    <li><a href="#about">EASTELpreneurs</a></li>
-                    <li><a href="#services">Business Solutions</a></li>
-                    <li><a href="#contact">Lifestyle Services</a></li>
+                    <li><i class="fas fa-check"></i> 500GB High Speed Internet</li>
+                    <li><i class="fas fa-check"></i> Full Hotspot</li>
+                    <li><i class="fas fa-check"></i> 3GB Data Roaming</li>
+                    <li><i class="fas fa-check"></i> Unlimited Calls</li>
+                    <li><i class="fas fa-check"></i> 10 SMS</li>
+                    <li><i class="fas fa-check"></i> 30 Days Validity</li>
+                </ul>
+                <button class="btn btn-primary">Subscribe</button>
+            </div>
+            <div class="plan-card featured">
+                <div class="price">RM 68 <span>/month</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 700GB High Speed Internet</li>
+                    <li><i class="fas fa-check"></i> Full Hotspot</li>
+                    <li><i class="fas fa-check"></i> 5GB Data Roaming</li>
+                    <li><i class="fas fa-check"></i> Unlimited Calls</li>
+                    <li><i class="fas fa-check"></i> 10 SMS</li>
+                    <li><i class="fas fa-check"></i> 30 Days Validity</li>
+                </ul>
+                <button class="btn btn-primary">Subscribe</button>
+            </div>
+            <div class="plan-card">
+                <div class="price">RM 98 <span>/month</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 999GB High Speed Internet</li>
+                    <li><i class="fas fa-check"></i> Full Hotspot</li>
+                    <li><i class="fas fa-check"></i> 10GB Data Roaming</li>
+                    <li><i class="fas fa-check"></i> Unlimited Calls</li>
+                    <li><i class="fas fa-check"></i> 10 SMS</li>
+                    <li><i class="fas fa-check"></i> 30 Days Validity</li>
+                </ul>
+                <button class="btn btn-primary">Subscribe</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FAQ ─── -->
+    <section class="faq-section" id="faq">
+        <h2 class="section-title">FAQs</h2>
+        <p class="section-subtitle">Frequently asked questions about Eastel</p>
+        <div class="faq-list">
+            <div class="faq-item active">
+                <div class="faq-question">1. Who is Eastel and which network does Eastel operate on? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Eastel is managed by Anchor Communications Sdn. Bhd., a fully regulated and certified Network Service Provider and Application Service Provider licensed by SKMM Malaysia. Eastel operates as a Mobile Virtual Network Operator (MVNO) using U Mobile's network infrastructure.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">2. What services are provided under Eastel? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">As a thick MVNO, Eastel provides prepaid, postpaid, family plans, IoT and co-branding solutions, including eSIM, for voice, SMS, data, reloads, mobile number portability, and value-added services, supported by an incentive-based referral programme.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">3. How can customers check network coverage? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Network coverage can be checked via U Mobile's official coverage map and the Eastel App advisory: <a href="https://www.u.com.my/en/personal/support/coverage-map" target="_blank">u.com.my/coverage-map</a></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">4. How do I join Eastel? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">You can join Eastel by registering a Starter Pack SIM card for RM10.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">5. How can I contact Eastel? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Eastel Hotline: 011-70337777 (8:00am – 10:00pm daily)<br>WhatsApp Support: 011-61601220<br>Email: <a href="mailto:support@eastel.com.my">support@eastel.com.my</a><br>Operation Office: KL Eco City Mall (10:00am – 10:00pm daily)</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">6. Where can I purchase an Eastel SIM card? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Eastel SIM cards can be purchased via walk-in at the Eastel Operation Office, Hotline (011-70337777), WhatsApp (011-61601220), Email, or the Eastel Mobile Application.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">7. What identification documents are required for registration? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Malaysians / Permanent Residents: MyKad, MyPR, MyTentera, or MyKAS. Foreign nationals: Passport.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">8. What is the minimum age requirement for registration? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Below 12 years old: not allowed. Ages 12–17: As a mobile user only. Age 18 and above: May register and be an EASTELPRENEUR.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">9. How many Eastel SIM cards can be registered under one ID? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Malaysians / Permanent Residents: Up to 5 active Eastel SIM cards under one IC. Foreign nationals: Up to 5 prepaid SIMs across all telco providers. Companies: No limit, subject to company verification.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">10. Does the Eastel SIM card support IDD and international roaming? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Yes.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── DOWNLOAD APP ─── -->
+    <section class="download-section" id="download">
+        <h2 class="section-title" style="color:white;">Download Eastel App</h2>
+        <p class="section-subtitle" style="color:rgba(255,255,255,0.8);">Manage your Eastel Account seamlessly — onboard new prospects, reload, and track rewards anytime, anywhere.</p>
+        <div class="app-badges">
+            <a href="#" class="app-badge">
+                <i class="fab fa-apple"></i>
+                <div style="text-align:left;">
+                    <div style="font-size:0.7rem;font-weight:400;opacity:0.7;">Download on the</div>
+                    <div style="font-size:1rem;font-weight:600;">App Store</div>
+                </div>
+            </a>
+            <a href="#" class="app-badge">
+                <i class="fab fa-google-play"></i>
+                <div style="text-align:left;">
+                    <div style="font-size:0.7rem;font-weight:400;opacity:0.7;">Get it on</div>
+                    <div style="font-size:1rem;font-weight:600;">Google Play</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+
+
+    <!-- ─── SCAN OVERLAY ─── -->
+    <div id="scanOverlay">
+        <button class="scan-close" id="scanClose">&times;</button>
+        <img id="scanPreview" alt="Captured IC">
+        <div class="scan-status" id="scanStatus"><i class="fas fa-spinner fa-pulse"></i> Processing IC card...</div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>About Eastel</h4>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">EASTELpreneurs</a></li>
+                    <li><a href="#">Business Solutions</a></li>
+                    <li><a href="#">Lifestyle Services</a></li>
                 </ul>
             </div>
-            <div class="footer-column">
-                <h3>Support</h3>
+            <div class="footer-col">
+                <h4>Support</h4>
                 <ul>
                     <li><a href="#">Technical Support</a></li>
                     <li><a href="#">Billing & Payments</a></li>
                     <li><a href="#">Service Outages</a></li>
-                    <li><a href="#">Upgrade/Downgrade</a></li>
+                    <li><a href="#">FAQs</a></li>
                 </ul>
             </div>
-            <div class="footer-column">
-                <h3>Legal</h3>
+            <div class="footer-col">
+                <h4>Legal</h4>
                 <ul>
                     <li><a href="#">Terms and Conditions</a></li>
                     <li><a href="#">Privacy Policy</a></li>
                     <li><a href="#">Delivery Policy</a></li>
                     <li><a href="#">Code of Conduct</a></li>
+                    <li><a href="#">Notices</a></li>
                     <li><a href="#">Exchange and Return Policy</a></li>
                     <li><a href="#">Eastel Wallet Upgrade</a></li>
                     <li><a href="#">Eastel Starter Kit</a></li>
@@ -749,8 +1042,8 @@
                     <li><a href="#">www.complaint.cfm.org.my</a></li>
                 </ul>
             </div>
-            <div class="footer-column">
-                <h3>Connect With Us</h3>
+            <div class="footer-col">
+                <h4>Connect With Us</h4>
                 <div class="social-links">
                     <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -759,102 +1052,310 @@
                     <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
                     <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 </div>
-                <div class="app-store">
-                    <img src="https://via.placeholder.com/120x40/00ffff/000000?text=App+Store" alt="App Store">
-                    <img src="https://via.placeholder.com/120x40/00ffff/000000?text=Google+Play" alt="Google Play">
+                <div class="app-badges" style="margin-top:1.5rem;justify-content:flex-start;">
+                    <a href="#" class="app-badge" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:white;">
+                        <i class="fab fa-apple"></i>
+                        <div style="text-align:left;">
+                            <div style="font-size:0.65rem;font-weight:400;opacity:0.6;">Download on the</div>
+                            <div style="font-size:0.85rem;font-weight:600;">App Store</div>
+                        </div>
+                    </a>
+                    <a href="#" class="app-badge" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:white;">
+                        <i class="fab fa-google-play"></i>
+                        <div style="text-align:left;">
+                            <div style="font-size:0.65rem;font-weight:400;opacity:0.6;">Get it on</div>
+                            <div style="font-size:0.85rem;font-weight:600;">Google Play</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            © 2026 Eastel. All Rights Reserved. | <a href="#" style="color:var(--accent);">Terms of Service</a> | <a href="#" style="color:var(--accent);">Privacy Policy</a>
+            <span>&copy; 2026 Anchor Communications Sdn. Bhd. 202401020764 (1566613-W) All Rights Reserved.</span>
+            <div>
+                <a href="#" style="color:rgba(255,255,255,0.5);">Terms of Service</a>
+                <span style="margin:0 0.5rem;opacity:0.3;">|</span>
+                <a href="#" style="color:rgba(255,255,255,0.5);">Privacy Policy</a>
+            </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <script>
-        document.getElementById('openForm').addEventListener('click', function(){
-            document.getElementById('formSection').style.display = 'block';
-            document.getElementById('formSection').scrollIntoView({behavior:'smooth'});
-        });
+<script>
+    function scrollTo(el) {
+        document.getElementById(el).scrollIntoView({behavior:'smooth'});
+    }
 
-        document.getElementById('interestForm').addEventListener('submit', function(e){
+    // Mobile menu
+    document.getElementById('menuToggle').addEventListener('click', function(){
+        document.getElementById('mainNav').classList.toggle('open');
+    });
+
+    // Nav links
+    document.querySelectorAll('nav a, .header-right a[href="#"], .lang-switch a').forEach(function(a){
+        if(!a.closest('.dropdown')) {
+            a.addEventListener('click', function(e){
+                var txt = this.textContent.trim();
+                if(txt === 'Consumer' || txt === 'Mobile Plan' || txt === 'IDD' || txt === 'Roaming') {
+                    e.preventDefault();
+                    scrollTo('plans');
+                    document.getElementById('mainNav').classList.remove('open');
+                } else if(txt === 'EASTELpreneurs') {
+                    e.preventDefault();
+                    scrollTo('dashForm');
+                    document.getElementById('mainNav').classList.remove('open');
+                } else if(txt === 'Business' || txt === 'Business Solutions') {
+                    e.preventDefault();
+                    scrollTo('dashForm');
+                    document.getElementById('mainNav').classList.remove('open');
+                } else if(txt === 'Lifestyle') {
+                    e.preventDefault();
+                    scrollTo('why');
+                    document.getElementById('mainNav').classList.remove('open');
+                } else if(txt === 'Contact Us') {
+                    e.preventDefault();
+                    scrollTo('dashForm');
+                    document.getElementById('mainNav').classList.remove('open');
+                } else if(txt === 'FAQ' || txt === 'FAQs') {
+                    e.preventDefault();
+                    scrollTo('faq');
+                }
+            });
+        }
+    });
+
+    // Hero buttons
+    document.getElementById('heroPlansBtn').addEventListener('click', function(e){
+        e.preventDefault(); scrollTo('plans');
+    });
+
+    // Service card buttons
+    document.querySelectorAll('.service-card .btn').forEach(function(btn){
+        btn.addEventListener('click', function(e){
             e.preventDefault();
-            const name = document.getElementById('name').value.trim();
-            const ic = document.getElementById('ic').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim();
-            const location = document.getElementById('location').value.trim();
-            const product = document.getElementById('product').value;
-            const serviceType = document.getElementById('serviceType').value;
-            const message = document.getElementById('message').value.trim();
-
-            // Validation
-            if(!name || !ic || !email || !phone || !address || !location || !product){
-                showResponse('Please fill in all required fields.', 'error');
-                return;
-            }
-
-            // IC validation (simple pattern check)
-            const icPattern = /^[0-9]{6}-[0-9]{2}-[0-9]{4}$/;
-            if(!icPattern.test(ic)){
-                showResponse('Please enter a valid IC number (format: 123456-78-9012)', 'error');
-                return;
-            }
-
-            const data = {
-                timestamp: new Date().toISOString(),
-                name,
-                ic,
-                email,
-                phone,
-                address,
-                location,
-                product,
-                serviceType: serviceType || '',
-                message
-            };
-
-            let records = JSON.parse(localStorage.getItem('eastelLeads') || '[]');
-            records.push(data);
-            localStorage.setItem('eastelLeads', JSON.stringify(records));
-
-            showResponse('Thank you! Your interest has been recorded.', 'successfully(); // Reset form
+            var parent = this.closest('.service-card');
+            var h3 = parent.querySelector('h3').textContent.trim();
+            if(h3 === 'Eastelpreneurs') scrollTo('dashForm');
+            else if(h3 === 'Business Solutions') scrollTo('dashForm');
+            else if(h3 === 'Mobile Plans' || h3 === 'View Plans') scrollTo('plans');
+            else if(h3.indexOf('Download') > -1) scrollTo('download');
+            else scrollTo('dashForm');
         });
+    });
 
-        function showResponse(msg, type){
-            const resp = document.getElementById('formResponse');
-            resp.textContent = msg;
-            resp.style.color = type === 'success' ? 'var(--success)' : 'var(--error)';
-            resp.style.fontWeight = '600';
-            setTimeout(() => { resp.textContent = ''; }, 5000);
+    // Plan subscribe buttons
+    document.querySelectorAll('.plan-card .btn').forEach(function(btn){
+        btn.addEventListener('click', function(){ scrollTo('dashForm'); });
+    });
+
+    // My Account
+    document.querySelector('.header-right a .fa-user').closest('a').addEventListener('click', function(e){
+        e.preventDefault();
+        window.open('https://subscriber.eastel.com.my', '_blank');
+    });
+
+    // Language switcher
+    document.querySelectorAll('.lang-switch a').forEach(function(a){
+        a.addEventListener('click', function(e){
+            e.preventDefault();
+            document.querySelectorAll('.lang-switch a').forEach(function(el){ el.classList.remove('active'); });
+            this.classList.add('active');
+        });
+    });
+
+    // Dropdown links in Consumer
+    document.querySelectorAll('.dropdown-menu a').forEach(function(a){
+        a.addEventListener('click', function(e){
+            e.preventDefault();
+            scrollTo('dashForm');
+            document.getElementById('mainNav').classList.remove('open');
+        });
+    });
+
+    // Footer legal links — open in new tab as subpages
+    document.querySelectorAll('.footer-col ul a').forEach(function(a){
+        a.addEventListener('click', function(e){
+            var t = this.textContent.trim();
+            if(t.indexOf('complaint') > -1) {
+                e.preventDefault();
+                window.open('https://www.complaint.cfm.org.my', '_blank');
+            }
+        });
+    });
+
+    // ─── FORM ───
+    document.getElementById('interestForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        var name = document.getElementById('name').value.trim();
+        var ic = document.getElementById('ic').value.trim();
+        var email = document.getElementById('email').value.trim();
+        var phone = document.getElementById('phone').value.trim();
+        var address = document.getElementById('address').value.trim();
+        var location = document.getElementById('location').value.trim();
+        var product = document.getElementById('product').value;
+
+        if(!name || !ic || !email || !phone || !address || !location || !product){
+            showResponse('Please fill in all required fields.', 'error');
+            return;
         }
 
-        // FAQ accordion functionality
-        document.querySelectorAll('.faq-question').forEach(item => {
-            item.addEventListener('click', () => {
-                const parent = item.parentElement;
-                parent.classList.toggle('active');
-            });
+        if(!/^[0-9]{6}-[0-9]{2}-[0-9]{4}$/.test(ic)){
+            showResponse('Please enter a valid IC number (format: 123456-78-9012)', 'error');
+            return;
+        }
+
+        var records = JSON.parse(localStorage.getItem('eastelLeads') || '[]');
+        records.push({
+            timestamp: new Date().toISOString(),
+            name: name, ic: ic, email: email, phone: phone,
+            address: address, location: location, product: product
+        });
+        localStorage.setItem('eastelLeads', JSON.stringify(records));
+
+        showResponse('Thank you! Your interest has been recorded.', 'success');
+        document.getElementById('interestForm').reset();
+    });
+
+    function showResponse(msg, type){
+        var resp = document.getElementById('formResponse');
+        resp.textContent = msg;
+        resp.style.color = type === 'success' ? 'var(--success)' : 'var(--error)';
+        resp.style.fontWeight = '600';
+        setTimeout(function(){ resp.textContent = ''; }, 5000);
+    }
+
+    // ─── FAQ ───
+    document.querySelectorAll('.faq-question').forEach(function(item){
+        item.addEventListener('click', function(){
+            item.parentElement.classList.toggle('active');
+        });
+    });
+
+    // ─── GPS LOCATION ───
+    document.getElementById('location').addEventListener('click', function(){
+        var input = this;
+        if(!navigator.geolocation) {
+            input.value = "https://www.google.com/maps?q=3.1390,101.6869";
+            return;
+        }
+        input.value = "Detecting location...";
+        navigator.geolocation.getCurrentPosition(
+            function(pos){
+                var lat = pos.coords.latitude;
+                var lng = pos.coords.longitude;
+                input.value = 'https://www.google.com/maps?q=' + lat + ',' + lng;
+            },
+            function(err){
+                input.value = 'https://www.google.com/maps?q=3.1390,101.6869';
+                input.readOnly = false;
+                setTimeout(function(){ input.readOnly = true; }, 2000);
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        );
+    });
+
+    // Close mobile nav on outside click
+    document.addEventListener('click', function(e){
+        var nav = document.getElementById('mainNav');
+        var toggle = document.getElementById('menuToggle');
+        if(nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)){
+            nav.classList.remove('open');
+        }
+    });
+
+    // ─── OCR IC SCAN ───
+    (function(){
+        var scanBtn = document.getElementById('scanIcBtn');
+        var fileInput = document.getElementById('icFileInput');
+        var overlay = document.getElementById('scanOverlay');
+        var preview = document.getElementById('scanPreview');
+        var status = document.getElementById('scanStatus');
+        var closeBtn = document.getElementById('scanClose');
+
+        scanBtn.addEventListener('click', function(){
+            fileInput.click();
         });
 
-        // Location pinpoint simulation (in real app, this would integrate with Google Maps API)
-        document.getElementById('location').addEventListener('click', function() {
-            // Simulate location detection
-            const simulatedLocations = [
-                "Kuala Lumpur, Malaysia",
-                "Johor Bahru, Malaysia", 
-                "Penang, Malaysia",
-                "Melaka, Malaysia",
-                "Ipoh, Malaysia",
-                "Kota Kinabalu, Sabah",
-                "Kuching, Sarawak"
-            ];
-            
-            const randomLocation = simulatedLocations[Math.floor(Math.random() * simulatedLocations.length)];
-            this.value = randomLocation;
-            this.style.color = '#fff';
-            this.style.fontStyle = 'italic';
+        fileInput.addEventListener('change', function(e){
+            var file = e.target.files[0];
+            if(!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function(ev){
+                preview.src = ev.target.result;
+                overlay.classList.add('show');
+                status.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Processing IC card...';
+                runOcr(ev.target.result);
+            };
+            reader.readAsDataURL(file);
         });
-    </script>
+
+        closeBtn.addEventListener('click', function(){
+            overlay.classList.remove('show');
+            fileInput.value = '';
+        });
+
+        overlay.addEventListener('click', function(e){
+            if(e.target === overlay) {
+                overlay.classList.remove('show');
+                fileInput.value = '';
+            }
+        });
+
+        function runOcr(dataUrl){
+            Tesseract.recognize(
+                dataUrl,
+                'eng',
+                {
+                    logger: function(m){
+                        if(m.status === 'recognizing text'){
+                            status.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Reading card... ' + (m.progress * 100).toFixed(0) + '%';
+                        }
+                    }
+                }
+            ).then(function(result){
+                var text = result.data.text;
+                status.innerHTML = '<i class="fas fa-check-circle" style="color:#00c853;"></i> Extracting IC number...';
+
+                // Try multiple patterns for Malaysian IC number
+                var patterns = [
+                    /\d{6}-\d{2}-\d{4}/,
+                    /\d{6}\s?\d{2}\s?\d{4}/,
+                    /\d{12}/
+                ];
+
+                var icNum = '';
+                for(var i = 0; i < patterns.length; i++){
+                    var match = text.match(patterns[i]);
+                    if(match){
+                        icNum = match[0];
+                        break;
+                    }
+                }
+
+                setTimeout(function(){
+                    overlay.classList.remove('show');
+                    if(icNum){
+                        var formatted = icNum.replace(/\s/g, '');
+                        if(formatted.length === 12 && formatted.indexOf('-') === -1){
+                            formatted = formatted.slice(0,6) + '-' + formatted.slice(6,8) + '-' + formatted.slice(8);
+                        }
+                        document.getElementById('ic').value = formatted;
+                        showResponse('IC number captured successfully!', 'success');
+                    } else {
+                        showResponse('Could not read IC number. Please enter manually.', 'error');
+                    }
+                    fileInput.value = '';
+                }, 800);
+            }).catch(function(err){
+                status.innerHTML = '<i class="fas fa-times-circle" style="color:#ff1744;"></i> OCR failed. Please try again.';
+                setTimeout(function(){
+                    overlay.classList.remove('show');
+                    fileInput.value = '';
+                }, 2000);
+            });
+        }
+    })();
+</script>
 </body>
 </html>
